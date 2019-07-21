@@ -16,30 +16,56 @@ async function main() {
   };
 
   const stream = fs.createReadStream(path, options);
-  let lines = await getStreamLines(stream);
 
-  const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
+  try {
+    const lines = await getStreamLines(stream);
+    const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
+    const claims: Claim[] = [];
 
-  lines.forEach(l => {
-    const claim = getClaim(l);
+    lines.forEach(l => {
+      const claim = getClaim(l);
+      claims.push(claim);
 
-    for (let y = claim.y; y < (claim.y + claim.height); y += 1) {
-      for (let x = claim.x; x < (claim.x + claim.width); x += 1) {
-        cloth[y][x] += 1;
-      }
-    }
-  });
-
-  let commonSquareInches = 0;
-  cloth.forEach(row => {
-    row.forEach(square => {
-      if (square > 1) {
-        commonSquareInches += 1;
+      for (let y = claim.y; y < (claim.y + claim.height); y += 1) {
+        for (let x = claim.x; x < (claim.x + claim.width); x += 1) {
+          cloth[y][x] += 1;
+        }
       }
     });
-  });
 
-  console.log('common squ in:', commonSquareInches);
+    let commonSquareInches = 0;
+    cloth.forEach(row => {
+      row.forEach(square => {
+        if (square > 1) {
+          commonSquareInches += 1;
+        }
+      });
+    });
+
+    console.log('common squ in:', commonSquareInches);
+
+    claims.forEach(c => {
+      let no_overlap = true;
+      for (let y = c.y; y < (c.y + c.height); y += 1) {
+        for (let x = c.x; x < (c.x + c.width); x += 1) {
+          if (cloth[y][x] !== 1) {
+            no_overlap = false;
+            break;
+          }
+        }
+
+        if (!no_overlap) {
+          break;
+        }
+      }
+
+      if (no_overlap) {
+        console.log('this one:', c.id);
+      }
+    });
+  } catch(err) {
+    console.error(err);
+  }
 }
 
 main();
