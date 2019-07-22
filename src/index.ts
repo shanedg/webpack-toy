@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as _ from 'lodash';
 
-type Claim = {
-  id: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import {
+  Claim,
+  getStreamLines,
+  readClaims,
+  countOverlappingSquareInches,
+  hasNoOverlap,
+} from './lib';
 
 async function main() {
   const path = 'input.txt';
@@ -15,88 +15,23 @@ async function main() {
     encoding: 'UTF-8',
   };
 
-  const stream = fs.createReadStream(path, options);
-
   try {
-    const lines = await getStreamLines(stream);
     const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
     const claims: Claim[] = [];
 
-    lines.forEach(l => {
-      const claim = getClaim(l);
-      claims.push(claim);
+    const stream = fs.createReadStream(path, options);
+    const lines = await getStreamLines(stream);
+    lines.forEach(line => readClaims(line, claims, cloth));
 
-      for (let y = claim.y; y < (claim.y + claim.height); y += 1) {
-        for (let x = claim.x; x < (claim.x + claim.width); x += 1) {
-          cloth[y][x] += 1;
-        }
-      }
-    });
+    const overlap = countOverlappingSquareInches(cloth);
+    console.log('common squ in:', overlap);
 
-    let commonSquareInches = 0;
-    cloth.forEach(row => {
-      row.forEach(square => {
-        if (square > 1) {
-          commonSquareInches += 1;
-        }
-      });
-    });
+    const claimsWithoutOverlap = claims.filter(claim => hasNoOverlap(claim, cloth));
+    console.log('claims w/o overlap:\n', claimsWithoutOverlap);
 
-    console.log('common squ in:', commonSquareInches);
-
-    claims.forEach(c => {
-      let no_overlap = true;
-      for (let y = c.y; y < (c.y + c.height); y += 1) {
-        for (let x = c.x; x < (c.x + c.width); x += 1) {
-          if (cloth[y][x] !== 1) {
-            no_overlap = false;
-            break;
-          }
-        }
-
-        if (!no_overlap) {
-          break;
-        }
-      }
-
-      if (no_overlap) {
-        console.log('this one:', c.id);
-      }
-    });
   } catch(err) {
     console.error(err);
   }
 }
 
 main();
-
-function getClaim(line: string): Claim {
-  const claimRegEx = new RegExp(/#(\d+) @ (\d+),(\d+): (\d+)x(\d+)/);
-  const matches = line.match(claimRegEx);
-
-  return {
-    id: parseInt(matches[1]),
-    x: parseInt(matches[2]),
-    y: parseInt(matches[3]),
-    width: parseInt(matches[4]),
-    height: parseInt(matches[5]),
-  };
-}
-
-function getStreamLines(stream): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    let contents = '';
-
-    stream.on('error', (err) => {
-      reject(err);
-    });
-
-    stream.on('data', (chunk) => {
-      contents += chunk;
-    });
-
-    stream.on('end', () => {
-      resolve(contents.split('\n'));
-    });
-  });
-}
