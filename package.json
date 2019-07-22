@@ -1,19 +1,22 @@
 {
   "name": "ts-node-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "npm run build && node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "start": "webpack && node dist/index.js"
   },
-  "author": "",
+  "author": "shanedgarrity@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@types/lodash": "^4.14.136",
     "@types/node": "^12.6.8",
-    "typescript": "^3.5.3"
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6"
   },
   "dependencies": {
     "lodash": "^4.17.15"
