@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack && node dist/index.js"
+    "build:prod": "webpack --production",
+    "start": "npm run build && node dist/index.js",
+    "start:prod": "npm run build:prod && node dist/index.js",
+    "webpack:stats": "webpack --json --profile > stats.json"
   },
   "author": "shanedgarrity@gmail.com",
   "license": "ISC",
