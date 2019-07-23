@@ -1,13 +1,7 @@
-import * as fs from 'fs';
-import * as _ from 'lodash';
+import fs from 'fs';
+import _ from 'lodash';
 
-import {
-  Claim,
-  getStreamLines,
-  readClaims,
-  countOverlappingSquareInches,
-  hasNoOverlap,
-} from './lib';
+import * as lib from './lib';
 
 async function main() {
   const path = 'input.txt';
@@ -17,16 +11,16 @@ async function main() {
 
   try {
     const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
-    const claims: Claim[] = [];
+    const claims: lib.Claim[] = [];
 
     const stream = fs.createReadStream(path, options);
-    const lines = await getStreamLines(stream);
-    lines.forEach(line => readClaims(line, claims, cloth));
+    const lines = await lib.getStreamLines(stream);
+    lines.forEach(line => lib.readClaims(line, claims, cloth));
 
-    const overlap = countOverlappingSquareInches(cloth);
+    const overlap = lib.countOverlappingSquareInches(cloth);
     console.log('common squ in:', overlap);
 
-    const claimsWithoutOverlap = claims.filter(claim => hasNoOverlap(claim, cloth));
+    const claimsWithoutOverlap = claims.filter(claim => lib.hasNoOverlap(claim, cloth));
     console.log('claims w/o overlap:\n', claimsWithoutOverlap);
 
   } catch(err) {
