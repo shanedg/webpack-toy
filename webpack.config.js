@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 /*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
@@ -26,7 +28,22 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
 
-    plugins: [new webpack.ProgressPlugin()],
+    plugins: [
+        new webpack.ProgressPlugin(),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            analyzerHost: '127.0.0.1',
+            analyzerPort: '8888',
+            reportFilename: 'report.html',
+            defaultSizes: 'parsed',
+            openAnalyzer: true,
+            generateStatsFile: true, // TODO: what if this was true, tho?
+            statsFilename: 'generate-stats.json',
+            statsOptions: null, // TODO: a bunch of config options available here
+            excludeAssets: null,
+            logLevel: 'info',
+        }),
+    ],
 
     module: {
         rules: [
