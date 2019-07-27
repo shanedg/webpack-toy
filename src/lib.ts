@@ -1,4 +1,5 @@
-import * as fs from 'fs';
+import fs from 'fs';
+import _ from 'lodash';
 
 export type Claim = {
   id: number;
@@ -6,6 +7,26 @@ export type Claim = {
   y: number;
   width: number;
   height: number;
+}
+
+export async function run() {
+  const path = 'input.txt';
+  const options = {
+    encoding: 'UTF-8',
+  };
+
+  const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
+  const claims: Claim[] = [];
+
+  const stream = fs.createReadStream(path, options);
+  const lines = await getStreamLines(stream);
+  lines.forEach(line => readClaims(line, claims, cloth));
+
+  const overlap = countOverlappingSquareInches(cloth);
+  console.log('common squ in:', overlap);
+
+  const claimsWithoutOverlap = claims.filter(claim => hasNoOverlap(claim, cloth));
+  console.log('claims w/o overlap:\n', claimsWithoutOverlap);
 }
 
 function parseClaim(line: string): Claim {
