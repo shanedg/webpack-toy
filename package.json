@@ -8,7 +8,9 @@
     "build:prod": "webpack --mode=production",
     "start": "npm run build && node dist/index.js",
     "start:prod": "npm run build:prod && node dist/index.*.js",
-    "webpack:stats": "webpack --json --profile --progress --mode=production > stats.json"
+    "webpack:stats:generate": "webpack --json --profile --progress --mode=production > stats.json",
+    "webpack:stats:report": "webpack-bundle-analyzer --mode static stats.json dist/",
+    "webpack:stats:serve": "webpack-bundle-analyzer stats.json dist/"
   },
   "author": "shanedgarrity@gmail.com",
   "license": "ISC",
