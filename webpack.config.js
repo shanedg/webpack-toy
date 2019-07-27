@@ -29,20 +29,63 @@ module.exports = {
 
     plugins: [
         new webpack.ProgressPlugin(),
-        new BundleAnalyzerPlugin({
-            analyzerMode: 'static',
-            analyzerHost: '127.0.0.1',
-            analyzerPort: '8888',
-            reportFilename: 'report.html',
-            defaultSizes: 'parsed',
-            openAnalyzer: true,
-            generateStatsFile: true, // TODO: what if this was true, tho?
-            statsFilename: 'generate-stats.json',
-            statsOptions: null, // TODO: a bunch of config options available here
-            excludeAssets: null,
-            logLevel: 'info',
-        }),
+        // new BundleAnalyzerPlugin({
+        //     analyzerMode: 'static',
+        //     analyzerHost: '127.0.0.1',
+        //     analyzerPort: '8888',
+        //     reportFilename: '../stats/config-report.html',
+        //     defaultSizes: 'parsed',
+        //     // openAnalyzer: true,
+        //     openAnalyzer: false,
+        //     generateStatsFile: true, // TODO: what if this was true, tho?
+        //     statsFilename: '../stats/config-stats.json',
+        //     // statsOptions: null, // TODO: a bunch of config options available here
+        //     statsOptions: {
+        //         // all: true,
+        //         assets: true,
+        //         assetsSort: '',
+        //         builtAt: true,
+        //         cached: true,
+        //         cachedAssets: true,
+        //         children: true,
+        //         chunkModules: true,
+        //         chunkOrigins: true,
+        //         chunks: true,
+        //         chunksSort: true,
+        //         // context: ''
+        //         depth: true,
+        //         entrypoints: true,
+        //         env: true,
+        //         errorDetails: true,
+        //         errors: true,
+        //         // exclude: '',
+        //         // excludeAssets: true,
+        //         // excludeModules: true,
+        //         hash: true,
+        //         // maxModules: 0,
+        //         moduleTrace: true,
+        //         modules: true,
+        //         // modulesSort: '',
+        //         optimizationBailout: true,
+        //         performance: true,
+        //         providedExports: true,
+        //         // publicPath: '',
+        //         reasons: true,
+        //         source: true,
+        //         timings: true,
+        //         usedExports: true,
+        //         version: true,
+        //         warnings: true,
+        //         // warningsFilter: '',
+        //     },
+        //     excludeAssets: null,
+        //     logLevel: 'info',
+        // }),
     ],
+
+    stats: {
+        all: true,
+    },
 
     module: {
         rules: [
