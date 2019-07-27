@@ -1,4 +1,5 @@
-import * as fs from 'fs';
+import fs from 'fs';
+import _ from 'lodash';
 
 export type Claim = {
   id: number;
@@ -6,6 +7,26 @@ export type Claim = {
   y: number;
   width: number;
   height: number;
+}
+
+export async function run() {
+  const path = 'input.txt';
+  const options = {
+    encoding: 'UTF-8',
+  };
+
+  const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
+  const claims: Claim[] = [];
+
+  const stream = fs.createReadStream(path, options);
+  const lines = await getStreamLines(stream);
+  lines.forEach(line => readClaims(line, claims, cloth));
+
+  const overlap = countOverlappingSquareInches(cloth);
+  console.log('common squ in:', overlap);
+
+  const claimsWithoutOverlap = claims.filter(claim => hasNoOverlap(claim, cloth));
+  console.log('claims w/o overlap:\n', claimsWithoutOverlap);
 }
 
 function parseClaim(line: string): Claim {
@@ -32,7 +53,7 @@ export function getStreamLines(stream: fs.ReadStream): Promise<string[]> {
 }
 
 const createStreamPromiseCallback = (stream: fs.ReadStream) => {
-  return (resolve, reject) => {
+  return (resolve: Function, reject: Function) => {
     let contents = '';
 
     stream.on('error', (err) => {
@@ -49,9 +70,9 @@ const createStreamPromiseCallback = (stream: fs.ReadStream) => {
   }
 }
 
-export const countOverlappingSquareInches = cloth => {
+export const countOverlappingSquareInches = (cloth: number[][]) => {
   let overlappingSquareInches = 0;
-  cloth.forEach(row => {
+  cloth.forEach((row: number[]) => {
     row.forEach(square => {
       if (square > 1) {
         overlappingSquareInches += 1;
@@ -62,7 +83,7 @@ export const countOverlappingSquareInches = cloth => {
   return overlappingSquareInches;
 }
 
-export const readClaims = (line, claims, cloth) => {
+export const readClaims = (line: string, claims: Claim[], cloth: number[][]) => {
   const claim = parseClaim(line);
   claims.push(claim);
 
@@ -75,7 +96,7 @@ export const readClaims = (line, claims, cloth) => {
   }
 }
 
-export const hasNoOverlap = (claim, cloth): boolean => {
+export const hasNoOverlap = (claim: Claim, cloth: number[][]): boolean => {
   const yMax = claim.y + claim.height;
   const xMax = claim.x + claim.width;
 
