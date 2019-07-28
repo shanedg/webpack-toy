@@ -83,6 +83,8 @@ module.exports = {
         // }),
     ],
 
+    devtool: 'source-map',
+
     stats: {
         all: true,
     },
