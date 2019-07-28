@@ -1,5 +1,5 @@
 import fs from 'fs';
-import _ from 'lodash';
+import { range } from 'lodash-es';
 
 export type Claim = {
   id: number;
@@ -15,7 +15,7 @@ export async function run() {
     encoding: 'UTF-8',
   };
 
-  const cloth = _.range(0, 1000).map(() => _.range(0, 1000, 0));
+  const cloth = range(0, 1000).map(() => range(0, 1000, 0));
   const claims: Claim[] = [];
 
   const stream = fs.createReadStream(path, options);

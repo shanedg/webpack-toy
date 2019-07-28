@@ -4,21 +4,23 @@
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "build:prod": "webpack --mode=production",
+    "build": "rm -rf dist/ && webpack",
+    "build:prod": "rm -rf dist/ && webpack --mode=production",
     "start": "npm run build && node dist/index.js",
     "start:prod": "npm run build:prod && node dist/index.*.js",
     "webpack:stats:generate": "webpack --json --profile --progress --mode=production > stats.json",
     "webpack:stats:report": "webpack-bundle-analyzer --mode static stats.json dist/",
-    "webpack:stats:serve": "webpack-bundle-analyzer stats.json dist/"
+    "webpack:stats:serve": "webpack-bundle-analyzer stats.json dist/",
+    "source-map-explorer": "source-map-explorer dist/index.*.js"
   },
   "author": "shanedgarrity@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "@types/lodash": "^4.14.136",
+    "@types/lodash-es": "^4.17.3",
     "@types/node": "^12.6.8",
     "@types/webpack": "^4.32.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "source-map-explorer": "^2.0.1",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.36.1",
@@ -26,6 +28,6 @@
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash-es": "^4.17.15"
   }
 }
