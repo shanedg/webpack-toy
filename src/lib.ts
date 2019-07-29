@@ -11,6 +11,9 @@ export type Claim = {
 
 export default class ClaimLib {
 
+  /**
+   * Run the Advent of Code 2018 - Day 3 claim analysis.
+   */
   async run() {
     const path = 'input.txt';
     const options = {
@@ -31,6 +34,10 @@ export default class ClaimLib {
     console.log('claims w/o overlap:\n', claimsWithoutOverlap);
   }
 
+  /**
+   * Parse a claim from a line of input
+   * @param line String-encoded claim
+   */
   parseClaim(line: string): Claim {
     // e.g.
     // #1 @ 82,901: 26x12
@@ -50,10 +57,18 @@ export default class ClaimLib {
     };
   }
 
+  /**
+   * Wrap input file lines stream in a promise.
+   * @param stream Input file stream
+   */
   getStreamLines(stream: fs.ReadStream): Promise<string[]> {
     return new Promise(this.createStreamPromiseCallback(stream));
   }
 
+  /**
+   * Partially apply the provided stream to a new function for use as a promise callback.
+   * @param stream Input file stream
+   */
   createStreamPromiseCallback = (stream: fs.ReadStream) => {
     return (resolve: Function, reject: Function) => {
       let contents = '';
@@ -72,6 +87,10 @@ export default class ClaimLib {
     }
   }
 
+  /**
+   * Traverse the cloth after adding claims and count the number of square inches with >1 claim.
+   * @param cloth Cloth populated with claims
+   */
   countOverlappingSquareInches = (cloth: number[][]) => {
     let overlappingSquareInches = 0;
     cloth.forEach((row: number[]) => {
@@ -85,6 +104,12 @@ export default class ClaimLib {
     return overlappingSquareInches;
   }
 
+  /**
+   * Process each line of input, record and update the cloth with each claim.
+   * @param line A single, string-encoded claim
+   * @param claims List of all claims seen so far
+   * @param cloth Cloth populated with claims seen so far
+   */
   readClaim = (line: string, claims: Claim[], cloth: number[][]) => {
     const claim = this.parseClaim(line);
     claims.push(claim);
@@ -98,6 +123,11 @@ export default class ClaimLib {
     }
   }
 
+  /**
+   * Traverse the area of the cloth defined by a claim and report whether there is overlap.
+   * @param claim Claim to check for overlap
+   * @param cloth Cloth populated with claims
+   */
   hasNoOverlap = (claim: Claim, cloth: number[][]): boolean => {
     const yMax = claim.y + claim.height;
     const xMax = claim.x + claim.width;
