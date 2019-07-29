@@ -22,7 +22,7 @@ export default class ClaimLib {
 
     const stream = fs.createReadStream(path, options);
     const lines = await this.getStreamLines(stream);
-    lines.forEach(line => this.readClaims(line, claims, cloth));
+    lines.forEach(line => this.readClaim(line, claims, cloth));
 
     const overlap = this.countOverlappingSquareInches(cloth);
     console.log('common squ in:', overlap);
@@ -85,7 +85,7 @@ export default class ClaimLib {
     return overlappingSquareInches;
   }
 
-  readClaims = (line: string, claims: Claim[], cloth: number[][]) => {
+  readClaim = (line: string, claims: Claim[], cloth: number[][]) => {
     const claim = this.parseClaim(line);
     claims.push(claim);
 
