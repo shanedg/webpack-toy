@@ -1,9 +1,9 @@
-import * as lib from './lib';
+import ClaimLib from './lib';
 
 function main() {
 
   try {
-    lib.run();
+    new ClaimLib().run();
   } catch(err) {
     console.error(err);
   }
