@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
+const MyCustomWebpackPlugin = require('./custom-webpack-plugin/custom-webpack-plugin');
+
 /*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
@@ -55,6 +57,7 @@ module.exports = function(env, args) {
 
         plugins: [
             new CleanWebpackPlugin(),
+            new MyCustomWebpackPlugin(),
             new webpack.ProgressPlugin(webpackProgressOptions),
             new BundleAnalyzerPlugin(webpackBundleAnalyzerOptions),
         ],
