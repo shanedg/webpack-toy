@@ -1,8 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -16,6 +16,30 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
  * https://webpack.js.org/plugins/split-chunks-plugin/
  *
  */
+
+const webpackProgressOptions = {
+    profile: true,
+    // // custom handler for progress reporting
+    // handler: (percentage, message, ...args) => {
+    //     console.info(percentage, message);
+    // },
+};
+
+const webpackBundleAnalyzerOptions = {
+    analyzerMode: 'static',
+    analyzerHost: '127.0.0.1',
+    analyzerPort: '8888',
+    reportFilename: '../stats/config-report.html',
+    defaultSizes: 'parsed',
+    openAnalyzer: false,
+    generateStatsFile: true,
+    statsFilename: '../stats/config-stats.json',
+    statsOptions: {
+        all: true,
+    },
+    excludeAssets: null,
+    logLevel: 'info',
+};
 
 module.exports = function(env, args) {
     return {
@@ -31,59 +55,8 @@ module.exports = function(env, args) {
 
         plugins: [
             new CleanWebpackPlugin(),
-            new webpack.ProgressPlugin(),
-            // new BundleAnalyzerPlugin({
-            //     analyzerMode: 'static',
-            //     analyzerHost: '127.0.0.1',
-            //     analyzerPort: '8888',
-            //     reportFilename: '../stats/config-report.html',
-            //     defaultSizes: 'parsed',
-            //     // openAnalyzer: true,
-            //     openAnalyzer: false,
-            //     generateStatsFile: true, // TODO: what if this was true, tho?
-            //     statsFilename: '../stats/config-stats.json',
-            //     // statsOptions: null, // TODO: a bunch of config options available here
-            //     statsOptions: {
-            //         // all: true,
-            //         assets: true,
-            //         assetsSort: '',
-            //         builtAt: true,
-            //         cached: true,
-            //         cachedAssets: true,
-            //         children: true,
-            //         chunkModules: true,
-            //         chunkOrigins: true,
-            //         chunks: true,
-            //         chunksSort: true,
-            //         // context: ''
-            //         depth: true,
-            //         entrypoints: true,
-            //         env: true,
-            //         errorDetails: true,
-            //         errors: true,
-            //         // exclude: '',
-            //         // excludeAssets: true,
-            //         // excludeModules: true,
-            //         hash: true,
-            //         // maxModules: 0,
-            //         moduleTrace: true,
-            //         modules: true,
-            //         // modulesSort: '',
-            //         optimizationBailout: true,
-            //         performance: true,
-            //         providedExports: true,
-            //         // publicPath: '',
-            //         reasons: true,
-            //         source: true,
-            //         timings: true,
-            //         usedExports: true,
-            //         version: true,
-            //         warnings: true,
-            //         // warningsFilter: '',
-            //     },
-            //     excludeAssets: null,
-            //     logLevel: 'info',
-            // }),
+            new webpack.ProgressPlugin(webpackProgressOptions),
+            new BundleAnalyzerPlugin(webpackBundleAnalyzerOptions),
         ],
 
         devtool: 'source-map',
