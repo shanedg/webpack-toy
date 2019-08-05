@@ -17,6 +17,14 @@ const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
  *
  */
 
+const webpackProgressOptions = {
+    profile: true,
+    // // custom handler for progress reporting
+    // handler: (percentage, message, ...args) => {
+    //     console.info(percentage, message);
+    // },
+};
+
 const webpackBundleAnalyzerOptions = {
     analyzerMode: 'static',
     analyzerHost: '127.0.0.1',
@@ -47,7 +55,7 @@ module.exports = function(env, args) {
 
         plugins: [
             new CleanWebpackPlugin(),
-            new webpack.ProgressPlugin(),
+            new webpack.ProgressPlugin(webpackProgressOptions),
             new BundleAnalyzerPlugin(webpackBundleAnalyzerOptions),
         ],
 
