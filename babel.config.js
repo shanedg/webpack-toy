@@ -13,6 +13,13 @@ module.exports = function(api) {
   const plugins = [
   ];
 
+  if (api.env('test')) {
+    plugins.push(
+      '@babel/plugin-transform-modules-commonjs',
+      '@babel/plugin-proposal-class-properties',
+    );
+  }
+
   return {
     presets,
     plugins,
