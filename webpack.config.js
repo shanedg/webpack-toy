@@ -4,31 +4,14 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 
-/*
- * SplitChunksPlugin is enabled by default and replaced
- * deprecated CommonsChunkPlugin. It automatically identifies modules which
- * should be splitted of chunk by heuristics using module duplication count and
- * module category (i. e. node_modules). And splits the chunks…
- *
- * It is safe to remove "splitChunks" from the generated configuration
- * and was added as an educational example.
- *
- * https://webpack.js.org/plugins/split-chunks-plugin/
- *
- */
+const MyCustomWebpackPlugin = require('./custom-webpack-plugin/custom-webpack-plugin');
 
 const webpackProgressOptions = {
     profile: true,
-    // // custom handler for progress reporting
-    // handler: (percentage, message, ...args) => {
-    //     console.info(percentage, message);
-    // },
 };
 
 const webpackBundleAnalyzerOptions = {
     analyzerMode: 'static',
-    analyzerHost: '127.0.0.1',
-    analyzerPort: '8888',
     reportFilename: '../stats/config-report.html',
     defaultSizes: 'parsed',
     openAnalyzer: false,
@@ -45,16 +28,17 @@ module.exports = function(env, args) {
     return {
         mode: 'development',
         entry: {
-            index: './src/index.ts'
+            index: './src/index.ts',
         },
 
         output: {
-            filename: '[name].[chunkhash].js',
+            filename: '[name].js',
             path: path.resolve(__dirname, 'dist')
         },
 
         plugins: [
             new CleanWebpackPlugin(),
+            new MyCustomWebpackPlugin(),
             new webpack.ProgressPlugin(webpackProgressOptions),
             new BundleAnalyzerPlugin(webpackBundleAnalyzerOptions),
         ],
@@ -68,11 +52,16 @@ module.exports = function(env, args) {
         module: {
             rules: [
                 {
-                    test: /.(ts|tsx)?$/,
-                    loader: 'ts-loader',
-                    include: [path.resolve(__dirname, 'src')],
-                    exclude: [/node_modules/]
-                }
+                    test: /\.j|ts$/,
+                    include: [
+                        path.resolve(__dirname, 'src'),
+                    ],
+                    exclude: [/node_modules/],
+                    loader: [
+                        'babel-loader',
+                        'ts-loader',
+                    ]
+                },
             ]
         },
 
@@ -93,7 +82,7 @@ module.exports = function(env, args) {
         },
 
         resolve: {
-            extensions: ['.tsx', '.ts', '.js']
+            extensions: ['.tsx', '.ts', '.js', '.jsx']
         },
 
         target: 'node'

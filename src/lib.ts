@@ -28,10 +28,10 @@ export default class ClaimLib {
     lines.forEach(line => this.readClaim(line, claims, cloth));
 
     const overlap = this.countOverlappingSquareInches(cloth);
-    console.log('common squ in:', overlap);
+    console.log(`common squ in: ${overlap}`);
 
     const claimsWithoutOverlap = claims.filter(claim => this.hasNoOverlap(claim, cloth));
-    console.log('claims w/o overlap:\n', claimsWithoutOverlap);
+    console.log(`claims w/o overlap:\n${JSON.stringify(claimsWithoutOverlap)}`);
   }
 
   /**
