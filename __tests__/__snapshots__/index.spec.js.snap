@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AoC '18 - Day 3 check answers printed to stdout snapshot correct results 1`] = `"[\\"common squ in: 107820\\",\\"claims w/o overlap:\\\\n[{\\\\\\"id\\\\\\":661,\\\\\\"x\\\\\\":785,\\\\\\"y\\\\\\":105,\\\\\\"width\\\\\\":27,\\\\\\"height\\\\\\":15}]\\"]"`;
